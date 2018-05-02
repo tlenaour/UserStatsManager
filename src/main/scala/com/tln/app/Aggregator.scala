@@ -1,6 +1,5 @@
 package com.tln.app
 
-
 import com.github.nscala_time.time.Imports._
 import com.tln.domain.{PageView, PageViewedDay, UserStats}
 
@@ -33,8 +32,8 @@ object Aggregator {
   def getNumberOfActiveDays(userPageViews : List[PageView]) : Int = {
     userPageViews
       .map(pageView => {
-        val dateparsed = DateTime.parse(pageView.timestamp)
-        PageViewedDay(dateparsed.getDayOfMonth, dateparsed.getDayOfWeek, dateparsed.getDayOfYear)
+        val dateParsed = DateTime.parse(pageView.timestamp)
+        PageViewedDay(dateParsed.getDayOfMonth, dateParsed.getDayOfWeek, dateParsed.getDayOfYear)
       })
       .distinct
       .size

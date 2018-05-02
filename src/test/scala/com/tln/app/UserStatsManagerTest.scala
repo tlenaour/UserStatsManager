@@ -9,8 +9,6 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
   val testDatas = UserStatsManager.datas
 
   override def beforeAll(): Unit = {
-    super.beforeAll()
-
     //Forcing System time to 27/04/2018 for test
     DateTimeUtils.setCurrentMillisFixed(1524835170000L)
 
@@ -34,12 +32,14 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
   }
 
   "addPageViewToUser" should {
-    "append a new PAgeView to the list of existing PageView" in {
+    "append a new PageView to the list of existing PageView" in {
       Given("a new PageView")
       val givenNewPageView = PageView("128ns9ng5s","Blog Page","2012-11-01T00:30:12.984Z")
+
       When("addPageViewToUser")
       UserStatsManager.addPageViewToUser(givenNewPageView)
-      Then("The new PageView is appened")
+
+      Then("The new PageView is appened to the user")
       testDatas should have size 2
       testDatas.get("128ns9ng5s") shouldBe Some(PageView("128ns9ng5s","Blog Page","2012-11-01T00:30:12.984Z") ::
         PageView("128ns9ng5s","Blog Page","2012-11-01T00:30:12.984Z")::
@@ -56,11 +56,13 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
   }
 
   "deleteUserData" should {
-    "append a new PAgeView to the list of existing PageView" in {
+    "delete all the data from a given user" in {
       Given("a userId")
       val givenUserId = "128ns9ng5s"
-      When("addPageViewToUser")
+
+      When("deleteUser")
       UserStatsManager.deleteUser(givenUserId)
+
       Then("The user is removed from datas")
       testDatas should have size 1
       testDatas.get("128ns9ng5s") shouldBe None
@@ -79,8 +81,10 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
     "compute statistics for a given user" in {
       Given("a userId")
       val givenUserId = "019mr8mf4r"
+
       When("getUserStatistics")
       val result = UserStatsManager.getUserStatistics(givenUserId)
+
       Then("The statistics are returned")
       result shouldBe UserStats("019mr8mf4r",6,5,"Blog Page")
     }

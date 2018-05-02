@@ -4,7 +4,7 @@ import com.tln.domain.{PageView, UserStats}
 import scala.collection.mutable
 
 object UserStatsManager {
-  private val NumberOfDaysForStats = 7
+  private val givenNumberOfRetentionDaysForStats = 7
   val datas : mutable.HashMap[String,List[PageView]] = new mutable.HashMap[String,List[PageView]]
 
   def addPageViewToUser(pageView : PageView) = {
@@ -20,7 +20,7 @@ object UserStatsManager {
 
   def getUserStatistics(userId : String) : UserStats= {
     val existingPageViews = datas.get(userId).get
-    Aggregator.getUserStats(userId,existingPageViews,NumberOfDaysForStats)
+    Aggregator.getUserStats(userId,existingPageViews,givenNumberOfRetentionDaysForStats)
   }
 
 }
