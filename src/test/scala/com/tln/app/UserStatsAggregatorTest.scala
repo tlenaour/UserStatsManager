@@ -1,10 +1,11 @@
 package com.tln.app
 
+import com.tln.app.UserStatsAggregator._
 import com.tln.domain.{PageView, UserStats}
 import org.joda.time.{DateTime, DateTimeUtils, LocalDateTime}
 import org.scalatest.{BeforeAndAfterAll, GivenWhenThen, Matchers, WordSpec}
 
-class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with BeforeAndAfterAll{
+class UserStatsAggregatorTest extends WordSpec with GivenWhenThen with Matchers with BeforeAndAfterAll{
 
   //Forcing System time to 27/04/2018 for test
   override def beforeAll(): Unit = DateTimeUtils.setCurrentMillisFixed(1524835170000L)
@@ -17,7 +18,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
       val givenPageView = PageView("019mr8mf4r","Administration Page","2012-12-02T00:30:12.984Z")
 
       When("addPageView")
-      val result = Aggregator.addPageView(givenPageView, givenListOfPageView)
+      val result = addPageView(givenPageView, givenListOfPageView)
 
       Then("The list with the new element is returned")
       result should have size 3
@@ -35,7 +36,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
       val givenNumberOfRetentionDays = 7
 
       When("isAvailableForStat")
-      val result = Aggregator.isPageViewAvailableForStat(givenDateTime,nowTest, givenNumberOfRetentionDays)
+      val result = isPageViewAvailableForStat(givenDateTime,nowTest, givenNumberOfRetentionDays)
 
       Then("false is returned because too old PageView")
       result shouldBe false
@@ -46,7 +47,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
       val givenNumberOfRetentionDays = 7
 
       When("isAvailableForStat with 7 days")
-      val result = Aggregator.isPageViewAvailableForStat(givenDateTime,nowTest, givenNumberOfRetentionDays)
+      val result = isPageViewAvailableForStat(givenDateTime,nowTest, givenNumberOfRetentionDays)
 
       Then("true is returned for available PageView")
       result shouldBe true
@@ -62,7 +63,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
       val givenNumberOfRetentionDays = 7
 
       When("getOnlyAvailablePageView")
-      val result = Aggregator.getOnlyAvailablePageView(givenPageViewList, givenNumberOfRetentionDays)
+      val result = getOnlyAvailablePageView(givenPageViewList, givenNumberOfRetentionDays)
 
       Then("the list is empty because PageViews are too old")
       result shouldBe empty
@@ -76,7 +77,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
       val givenNumberOfRetentionDays = 7
 
       When("getOnlyAvailablePageView")
-      val result = Aggregator.getOnlyAvailablePageView(givenPageViewList, givenNumberOfRetentionDays)
+      val result = getOnlyAvailablePageView(givenPageViewList, givenNumberOfRetentionDays)
 
       Then("the list is returned with only available PageView")
       result should have size 2
@@ -92,7 +93,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
         PageView("019mr8mf4r","Pricing Page","2012-12-03T00:30:12.984Z") :: Nil
 
       When("getNumberPagesViewed")
-      val result = Aggregator.getNumberPagesViewed(givenPageViewList)
+      val result = getNumberPagesViewed(givenPageViewList)
 
       Then("3 is returned")
       result shouldBe 3
@@ -110,7 +111,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
         PageView("019mr8mf4r","Administration Page","2012-12-02T00:30:12.984Z") :: Nil
 
       When("getMostViewedPage")
-      val result = Aggregator.getMostViewedPage(givenPageViewList)
+      val result = getMostViewedPage(givenPageViewList)
 
       Then("the most viewed Administration Page is returned")
       result shouldBe "Administration Page"
@@ -129,7 +130,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
         PageView("019mr8mf4r","Administration Page","2018-04-27T00:30:12.984Z"):: Nil
 
       When("getNumberOfActiveDays")
-      val result = Aggregator.getNumberOfActiveDays(givenPageViewList)
+      val result = getNumberOfActiveDays(givenPageViewList)
 
       Then("the max page administration is returned")
       result shouldBe 4
@@ -151,7 +152,7 @@ class AggregatorTest extends WordSpec with GivenWhenThen with Matchers with Befo
         PageView("019mr8mf4r","Administration Page","2018-04-27T00:30:12.984Z"):: Nil
 
       When("getUserStats")
-      val result = Aggregator.getUserStats(givenUserId, givenPageViewList,givenNumberOfRetentionDays)
+      val result = getUserStats(givenUserId, givenPageViewList,givenNumberOfRetentionDays)
 
       Then("the stats are returned")
       result shouldBe UserStats("019mr8mf4r",6,5,"Blog Page")

@@ -3,7 +3,7 @@ package com.tln.app
 import com.github.nscala_time.time.Imports._
 import com.tln.domain.{PageView, PageViewedDay, UserStats}
 
-object Aggregator {
+object UserStatsAggregator {
 
   def addPageView(pageView: PageView, userPageViews : List[PageView]) : List[PageView] = {
     pageView :: userPageViews

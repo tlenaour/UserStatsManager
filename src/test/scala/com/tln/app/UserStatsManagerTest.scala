@@ -1,5 +1,6 @@
 package com.tln.app
 
+import com.tln.app.UserStatsManager.{addPageViewToUser, deleteUser, getUserStatistics}
 import com.tln.domain.{PageView, UserStats}
 import org.joda.time.DateTimeUtils
 import org.scalatest.{BeforeAndAfterAll, GivenWhenThen, Matchers, WordSpec}
@@ -37,7 +38,7 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
       val givenNewPageView = PageView("128ns9ng5s","Blog Page","2012-11-01T00:30:12.984Z")
 
       When("addPageViewToUser")
-      UserStatsManager.addPageViewToUser(givenNewPageView)
+      addPageViewToUser(givenNewPageView)
 
       Then("The new PageView is appened to the user")
       testDatas should have size 2
@@ -61,7 +62,7 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
       val givenUserId = "128ns9ng5s"
 
       When("deleteUser")
-      UserStatsManager.deleteUser(givenUserId)
+      deleteUser(givenUserId)
 
       Then("The user is removed from datas")
       testDatas should have size 1
@@ -83,7 +84,7 @@ class UserStatsManagerTest extends WordSpec with GivenWhenThen with Matchers wit
       val givenUserId = "019mr8mf4r"
 
       When("getUserStatistics")
-      val result = UserStatsManager.getUserStatistics(givenUserId)
+      val result = getUserStatistics(givenUserId)
 
       Then("The statistics are returned")
       result shouldBe UserStats("019mr8mf4r",6,5,"Blog Page")

@@ -1,16 +1,17 @@
 package com.tln.app
 
+import com.tln.app.UserStatsAggregator.{addPageView, getUserStats}
 import com.tln.domain.{PageView, UserStats}
 import scala.collection.mutable
 
 object UserStatsManager {
   private val givenNumberOfRetentionDaysForStats = 7
-  val datas : mutable.HashMap[String,List[PageView]] = new mutable.HashMap[String,List[PageView]]
+  val datas = new mutable.HashMap[String,List[PageView]]
 
   def addPageViewToUser(pageView : PageView) = {
     val key = pageView.userId
     val existingPageViews = datas.get(key).get
-    val newPagesViews = Aggregator.addPageView(pageView,existingPageViews)
+    val newPagesViews = addPageView(pageView,existingPageViews)
     datas.update(key,newPagesViews)
   }
 
@@ -20,7 +21,6 @@ object UserStatsManager {
 
   def getUserStatistics(userId : String) : UserStats= {
     val existingPageViews = datas.get(userId).get
-    Aggregator.getUserStats(userId,existingPageViews,givenNumberOfRetentionDaysForStats)
+    getUserStats(userId,existingPageViews,givenNumberOfRetentionDaysForStats)
   }
-
 }
